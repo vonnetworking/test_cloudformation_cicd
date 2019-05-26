@@ -24,10 +24,9 @@ pipeline {
         stage('Delete Test Env') {
           steps {
             echo 'Deleting test stack in AWS...'
-            script {
-              sh ('aws cloudformation delete-stack --stack-name=$STACKID')
-            }
-            echo 'Stack marked for deletion: $STACKID'
+
+            sh ('aws cloudformation delete-stack --stack-name=`cat stackid.out`')
+            echo 'Test Stack marked for deletion...'
           }
         }
     }
