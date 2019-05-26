@@ -38,6 +38,6 @@ Resources:
         ErrorDocument: !Ref ErrorDocument
       Tags:
         -
-          Key: fa_aws_name
+          Key: fm_aws_name
           Value: MyS3Bucket
     DeletionPolicy: Retain
