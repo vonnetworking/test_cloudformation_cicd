@@ -2,7 +2,9 @@ task decompose (type: Exec) {
   doFirst { println "decomposing commit..."}
   doLast { println "Completed decompose!"}
 
-  commandLine 'util/decompose.bash'
+  workingDir '.'
+
+  commandLine 'sh', 'util/decompose.bash'
 
 }
 
