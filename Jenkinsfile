@@ -16,6 +16,9 @@ pipeline {
         stage('Build Test Env') {
             steps {
                 echo 'Building test stack in AWS...'
+
+                workingDir('.')
+
                 script {
                   STACKID = sh ( './util/_jenkins_create_test_stack.sh TestStack-$BUILD_NUMBER ../landing-zone/BasicGoodLandingZone.yaml ../params/BasicGoodLandingZone_test_params.json' )
                 }
