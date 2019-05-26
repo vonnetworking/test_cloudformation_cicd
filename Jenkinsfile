@@ -22,9 +22,9 @@ pipeline {
                                         --stack-name TestStack-$BUILD_NUMBER \
                                         --template-body file://./landing-zone/BasicGoodLandingZone.yaml \
                                         --parameters file://./params/BasicGoodLandingZone_test_params.json''',
-                             returnStdout: true).trim()
+                             returnStdout: true)
                 }
-                sh '''echo $STACKID | grep StackId | awk -F\':\' \'{print \$2}\' '''
+                sh '''echo $STACKID | grep StackId'''
             }
         }
     }
