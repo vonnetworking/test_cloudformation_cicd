@@ -1,0 +1,24 @@
+task setup {
+  doFirst { println "Gathering setup info for build..."}
+  doLast { println "Completed setup!"}
+
+  workingDir '.'
+
+  String fileContents = new File('./setup.csv').getText('UTF-8')
+}
+
+task CfnLint {
+  doFirst { println "Running cfn-lint with custom rules..." }
+  doLast { println "cfn-lint complete!" }
+
+  workingDir '.'
+
+  //on unix
+  commandLine 'cfn-lint MyStack.yaml'
+
+  //store the output instead of printing to the console:
+  standardOutput = new ByteArrayOutputStream()
+
+  return standardOutput.toString()
+  }
+}

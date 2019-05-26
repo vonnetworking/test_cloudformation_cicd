@@ -4,9 +4,9 @@ pipeline {
     stages {
         stage('Build') {
             if (isUnix()) {
-                sh './gradlew clean build'
+                sh './gradlew'
             } else {
-                bat 'gradlew.bat clean build'
+                bat 'gradlew.bat'
             }
         }
         stage('Test') {
