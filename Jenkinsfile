@@ -17,12 +17,8 @@ pipeline {
             steps {
                 echo 'Building test stack in AWS...'
 
-                echo pwd()
-
-                script {
-                  STACKID = sh ( './util/_jenkins_create_test_stack.sh TestStack-$BUILD_NUMBER ./landing-zone/BasicGoodLandingZone.yaml ./params/BasicGoodLandingZone_test_params.json' )
-                }
-                echo 'Test stack created ARN = $STACKID'
+                sh ( './util/_jenkins_create_test_stack.sh TestStack-$BUILD_NUMBER ./landing-zone/BasicGoodLandingZone.yaml ./params/BasicGoodLandingZone_test_params.json > stackid.out' )
+                sh ( 'cat stackid.out')
             }
         }
         stage('Delete Test Env') {
