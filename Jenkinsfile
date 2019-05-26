@@ -15,17 +15,21 @@ pipeline {
         }
         stage('Build Test Env') {
             steps {
-                sh 'echo building stuff in AWS...'
+                echo 'Building test stack in AWS...'
                 script {
-                  STACKID = sh (
-                             script: '''/usr/local/bin/aws cloudformation create-stack \
-                                        --stack-name TestStack-$BUILD_NUMBER \
-                                        --template-body file://./landing-zone/BasicGoodLandingZone.yaml \
-                                        --parameters file://./params/BasicGoodLandingZone_test_params.json''',
-                             returnStdout: true)
+                  STACKID = sh ( './util/_jenkins_create_test_stack.sh TestStack-$BUILD_NUMBER ../landing-zone/BasicGoodLandingZone.yaml ../params/BasicGoodLandingZone_test_params.json' )
                 }
-                sh '''echo $STACKID | grep StackId'''
+                echo 'Test stack created ARN = $STACKID'
             }
+        }
+        stage('Delete Test Env') {
+          steps {
+            echo 'Deleting test stack in AWS...'
+            script {
+              sh ('aws cloudformation delete-stack --stack-name=$STACKID')
+            }
+            echo 'Stack marked for deletion: $STACKID'
+          }
         }
     }
 }
