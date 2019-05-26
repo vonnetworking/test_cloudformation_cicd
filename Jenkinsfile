@@ -2,19 +2,22 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Decompose Commit') {
+        #decomposes the commit looking for one or more changed cloudformations
+        #or associated bootstraps; or handling updated lambdas
           steps {
-            sh './gradlew'
+            sh './gradlew decompose'
           }
         }
-        stage('Test') {
+        stage('Scan Code') {
             steps {
-                echo 'Testing..'
+                echo 'Running cfn-lint scans...'
+                sh './gradlew cfnlint'
             }
         }
-        stage('Deploy') {
+        stage('Build Test Env') {
             steps {
-                echo 'Deploying....'
+                sh 'echo building stuff in AWS...'
             }
         }
     }

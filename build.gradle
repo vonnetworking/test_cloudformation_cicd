@@ -1,0 +1,22 @@
+task decompose (type: Exec) {
+  doFirst { println "decomposing commit..."}
+  doLast { println "Completed decompose!"}
+
+  commandLine 'util/decompose.bash'
+
+}
+
+task cfnLint (type: Exec) {
+  doFirst { println "Running cfn-lint with custom rules..." }
+  doLast { println "cfn-lint complete!" }
+
+  workingDir '.'
+
+  //on unix
+  commandLine 'cfn-lint', '--info', 'landing-zone/BasicGoodLandingZone.yaml'
+
+  //store the output instead of printing to the console:
+  //standardOutput = new ByteArrayOutputStream()
+
+  //return standardOutput.toString()
+}

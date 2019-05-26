@@ -1,0 +1,43 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: >
+  Copy me to create good and / or bad test cases for various rules
+  1. copy me to the good or bad directory with a name that follows this convention
+    <name of rule class being tested>_good|bad.yaml
+  2. Update the area required with approriate failure or success test mode content
+  3. save and repeat as needed
+  NOTE -  There should be a good and a bad test case for each rule
+  Also note this base template should be updated so that it stays an overall GOOD
+  example
+Metadata:
+  Owner: some@email.address
+  ProjectName: Base Template
+  TemplateType: landing-zone
+  Version: 1.0.0
+  StepsToTest: "default set of steps to test the stacks"
+  StepsToCleanup: "default set of steps to test the stacks"
+
+Parameters:
+  IndexDocument:
+    AllowedValues: [index.html, index.cfml, index.aspx]
+    Description: Website landing page
+    Default: index.html
+    Type: Integer
+  ErrorDocument:
+    AllowedValues: [error.html, error.cfml, error.aspx]
+    Description: Website error page
+    Default: error.html
+    Type: String
+
+Resources:
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      WebsiteConfiguration:
+        IndexDocument: !Ref IndexDocument
+        ErrorDocument: !Ref ErrorDocument
+      Tags:
+        -
+          Key: fa_aws_name
+          Value: MyS3Bucket
+    DeletionPolicy: Retain
