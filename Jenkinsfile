@@ -3,8 +3,6 @@ pipeline {
 
     stages {
         stage('Decompose Commit') {
-        #decomposes the commit looking for one or more changed cloudformations
-        #or associated bootstraps; or handling updated lambdas
           steps {
             sh './gradlew decompose'
           }
