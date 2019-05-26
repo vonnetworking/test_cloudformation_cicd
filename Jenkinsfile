@@ -3,11 +3,7 @@ pipeline {
 
     stages {
         stage('Build') {
-            if (isUnix()) {
-                sh './gradlew'
-            } else {
-                bat 'gradlew.bat'
-            }
+            sh './gradlew'
         }
         stage('Test') {
             steps {
