@@ -25,7 +25,7 @@ pipeline {
           steps {
             echo 'Deleting test stack in AWS...'
 
-            sh ('aws cloudformation delete-stack --stack-name=`cat stackid.out`')
+            sh ('/usr/local/bin/aws', 'cloudformation delete-stack --stack-name=`cat stackid.out`')
             echo 'Test Stack marked for deletion...'
           }
         }
