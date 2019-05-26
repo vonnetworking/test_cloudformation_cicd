@@ -16,7 +16,10 @@ pipeline {
         stage('Build Test Env') {
             steps {
                 sh 'echo building stuff in AWS...'
-                sh '/usr/local/bin/aws cloudformation create-stack  --stack-name TestStack-$BRANCH_NAME-$BUILD_NUMBER --template-body file://./landing-zone/BasicGoodLandingZone.yaml --parameters file://./params/BasicGoodLandingZone_test_params.json'
+                STACKID = sh (
+                           script: sh '/usr/local/bin/aws cloudformation create-stack  --stack-name TestStack-$GIT_BRANCH-$BUILD_NUMBER --template-body file://./landing-zone/BasicGoodLandingZone.yaml --parameters file://./params/BasicGoodLandingZone_test_params.json | grep StackId | awk -F\':\' \'{print \$2}\' '
+                           returnStdout: true).trim()
+                sh 'echo $STACKID'
             }
         }
     }
