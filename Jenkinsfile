@@ -18,7 +18,11 @@ pipeline {
                 sh 'echo building stuff in AWS...'
                 script {
                   STACKID = sh (
-                             script: '/usr/local/bin/aws cloudformation create-stack  --stack-name TestStack-$BUILD_NUMBER --template-body file://./landing-zone/BasicGoodLandingZone.yaml --parameters file://./params/BasicGoodLandingZone_test_params.json | grep StackId | awk -F\':\' \'{print \$2}\' ',
+                             script: '''/usr/local/bin/aws cloudformation create-stack
+                                        --stack-name TestStack-$BUILD_NUMBER
+                                        --template-body file://./landing-zone/BasicGoodLandingZone.yaml
+                                        --parameters file://./params/BasicGoodLandingZone_test_params.json
+                                        | grep StackId | awk -F\':\' \'{print \$2}\' ''',
                              returnStdout: true).trim()
                 }
                 sh 'echo $STACKID'
