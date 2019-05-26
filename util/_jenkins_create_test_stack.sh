@@ -34,7 +34,7 @@ function build_stack () {
   --stack-name="$STACKNAME" \
   --template-body="file://$CLOUDFORMATION" \
   --parameters="file://$BUILDPARAMS" \
-  | sed 's/}//g' | grep StackId | awk -F'\"StackId\": ' '{print $2}'
+  | sed 's/}//g' | sed 's/\"//g' | grep StackId | awk -F'\"StackId\": ' '{print $2}'
 
 }
 
