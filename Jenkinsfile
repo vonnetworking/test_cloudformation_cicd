@@ -3,6 +3,8 @@ pipeline {
     environment {
         AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
         AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
+        CLOUDFORMATION = 'landing-zone/BasicGoodLandingZone.yaml'
+        CLOUDFORMATION_TEST_PARAMS='./params/BasicGoodLandingZone_test_params.json'
     }
 
     stages {

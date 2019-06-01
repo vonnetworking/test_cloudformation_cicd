@@ -21,7 +21,7 @@
 ###
 ############################################################################
 
-cfn-lint -r us-east-1,us-east-2 --info $CLOUDFORMATION
+/usr/local/bin/cfn-lint -r us-east-1,us-east-2 --info $CLOUDFORMATION
 
 if [ $? -eq 0 ]; then
   echo "success"
