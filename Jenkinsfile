@@ -26,6 +26,12 @@ pipeline {
           }
         }
 
+        stage('Scan Code (Static Security)') {
+          steps {
+              sh './util/_jenkins_cfn_nag_scan.sh'
+          }
+        }
+
         stage('Build Test Env') {
           environment {
             STACKNAME = sh(script: 'echo TestStack-$BUILD_NUMBER', returnStdout: true).trim()

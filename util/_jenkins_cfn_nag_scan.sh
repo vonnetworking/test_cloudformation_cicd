@@ -1,18 +1,21 @@
 #!/usr/bin/env bash
 
 ############################################################################
-###                 _jenkins_cfnlint_cft.sh
+###                 _jenkins_cfn_nag_scan.sh
 ###
-### Description: wrapper for cfnlint command returning success
+### Description: wrapper for cfn_nag_scan command returning success
 ### 		 or failure of cfnlint command
 ###
 ### Usage:
-###	    _jenkins_cfnlint_cft.sh
+###	    _jenkins_cfn_nag_scan.sh
 ###
 ###     ::ENV::
 ###     This script requires the following environment variables
 ###     CLOUDFORMATION - string - path to cloudformation that should have
 ###                               cfnlint run against it
+###     CLOUDFORMATION_TEST_PARAMS - string - path to cloudformation parameter
+###                                           file that should be used when
+###                                           scanning CLOUDFORMATION
 ###     ::PARAMS::
 ###       script takes no parameters, but expects certain environ var(s)
 ###
@@ -21,7 +24,10 @@
 ###
 ############################################################################
 
-/usr/local/bin/cfn-lint -r us-east-1,us-east-2 --list-rules --format=json --info $CLOUDFORMATION
+/usr/local/bin/cfn_nag_scan \
+--input-path $CLOUDFORMATION \
+--parameter-values-path=$CLOUDFORMATION_TEST_PARAMS \
+--profile_path='./util/.cfn_nagrc'
 
 if [ $? -eq 0 ]; then
   echo "success"
