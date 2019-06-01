@@ -31,8 +31,8 @@ function install_cloudsploit () {
 
   cd ${CLOUDSPLOIT_DIR}
 
-  /usr/local/bin/npm install > /dev/null 2>&1
-  /usr/local/bin/npm audit fix > /dev/null 2>&1
+  /usr/local/bin/npm install
+  /usr/local/bin/npm audit fix
 }
 
 function setup_cloudsploit () {
