@@ -4,7 +4,6 @@
 *.bin
 #ignore build artifacts dir
 /build_artifacts
-/cloudsploit_security_scanner
 # Ignore Gradle build output directory
 build
 build_artifacts

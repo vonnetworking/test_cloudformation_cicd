@@ -72,8 +72,8 @@ function main () {
   #basic check that stackid is available
 
 
-  install_cloudsploit
-  setup_cloudsploit
+  #install_cloudsploit
+  #setup_cloudsploit
   run_cloudsploit
 
   read RESULT < <(check_results)
