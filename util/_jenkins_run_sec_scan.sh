@@ -40,7 +40,7 @@ function setup_cloudsploit () {
 }
 
 function run_cloudsploit () {
-  node index.js --console --junit=../reports/sec_scan.xml > ../reports/cloudsploit_results.out
+  /usr/local/bin/node index.js --console --junit=../reports/sec_scan.xml > ../reports/cloudsploit_results.out
 }
 
 function check_results () {
