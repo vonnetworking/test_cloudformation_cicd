@@ -38,11 +38,6 @@ pipeline {
         stage('Run Cloudsploit') {
           steps {
             sh './util/_jenkins_run_sec_scan.sh'
-            post {
-              always {
-                junit "./reports/sec_scan.xml"
-                }
-              }
             }
         }
 
@@ -50,6 +45,11 @@ pipeline {
           steps {
             sh './util/_jenkins_delete_test_stack.sh'
           }
+        }
+    }
+    post {
+      always {
+        junit "./reports/sec_scan.xml"
         }
     }
 }
