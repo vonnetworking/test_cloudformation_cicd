@@ -36,14 +36,17 @@ function install_cloudsploit () {
 }
 
 function setup_cloudsploit () {
+  cd ${CLOUDSPLOIT_DIR}
   git apply ../util/cloudsploit.patch
 }
 
 function run_cloudsploit () {
+  cd ${CLOUDSPLOIT_DIR}
   /usr/local/bin/node index.js --console --junit=../reports/sec_scan.xml > ../reports/cloudsploit_results.out
 }
 
 function check_results () {
+  cd ${CLOUDSPLOIT_DIR}
   /usr/local/bin/aws cloudformation list-stack-resources \
   --stack-name=`cat ../stackid.out` \
   | grep "PhysicalResourceId" | awk -F ':' '{print $2}' | sed 's/"//g' | sed 's/,//g' | sed 's/ //g' > ../stack_resources.out
