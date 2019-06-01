@@ -49,7 +49,7 @@ pipeline {
     }
     post {
       always {
-        junit "./reports/sec_scan.xml"
+        junit "**/reports/*.xml"
         }
     }
 }
