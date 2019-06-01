@@ -22,19 +22,19 @@ pipeline {
 
         stage('Scan Code (Static)') {
           steps {
-              sh './util/_jenkins_cfnlint_cft.sh'
+              sh './gradlew cfnlint'
           }
         }
 
         stage('Build Test Env') {
           steps {
-              sh './util/_jenkins_build_test_stack.sh'
+              sh './gradlew build_test_stack'
           }
         }
 
         stage('Run Cloudsploit') {
           steps {
-            sh './util/_jenkins_run_sec_scan.sh'
+            sh './gradlew run_sec_scan'
             post {
               always {
                 junit "./reports/sec_scan.xml"
@@ -45,7 +45,7 @@ pipeline {
 
         stage('Delete Test Env') {
           steps {
-            sh './util/_jenkins_delete_test_stack.sh'
+            sh './gradlew delete_test_stack'
           }
         }
     }
