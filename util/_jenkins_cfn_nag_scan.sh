@@ -27,7 +27,7 @@
 /usr/local/bin/cfn_nag_scan \
 --input-path $CLOUDFORMATION \
 --parameter-values-path=$CLOUDFORMATION_TEST_PARAMS \
---profile_path='./util/.cfn_nagrc'
+--profile-path='./util/.cfn_nagrc'
 
 if [ $? -eq 0 ]; then
   echo "success"
