@@ -31,8 +31,8 @@ function install_cloudsploit () {
 
   cd ${CLOUDSPLOIT_DIR}
 
-  npm install > /dev/null 2>&1
-  npm audit fix > /dev/null 2>&1
+  /usr/local/bin/npm install > /dev/null 2>&1
+  /usr/local/bin/npm audit fix > /dev/null 2>&1
 }
 
 function setup_cloudsploit () {
@@ -75,8 +75,8 @@ function main () {
   #basic check that stackid is available
 
 
-  #install_cloudsploit
-  #setup_cloudsploit
+  install_cloudsploit
+  setup_cloudsploit
   run_cloudsploit
 
   read RESULT < <(check_results)
