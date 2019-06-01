@@ -1,10 +1,11 @@
 pipeline {
     agent any
     environment {
-        AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
-        AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
-        CLOUDFORMATION = 'landing-zone/BasicGoodLandingZone.yaml'
-        CLOUDFORMATION_TEST_PARAMS='./params/BasicGoodLandingZone_test_params.json'
+        AWS_PROD_CFT_S3_BUCKET     = credentials('jenkins-aws-prod-cft-s3-bucket')
+        AWS_ACCESS_KEY_ID          = credentials('jenkins-aws-secret-key-id')
+        AWS_SECRET_ACCESS_KEY      = credentials('jenkins-aws-secret-access-key')
+        CLOUDFORMATION             = 'landing-zone/BasicGoodLandingZone.yaml'
+        CLOUDFORMATION_TEST_PARAMS ='./params/BasicGoodLandingZone_test_params.json'
     }
 
     stages {
@@ -50,6 +51,11 @@ pipeline {
         stage('Delete Test Env') {
           steps {
             sh './util/_jenkins_delete_test_stack.sh'
+          }
+        }
+        stage('Publish to Prod S3') {
+          steps {
+            sh './util/_jenkins_publish_to_prod_s3.sh'
           }
         }
     }
