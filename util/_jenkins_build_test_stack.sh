@@ -46,7 +46,7 @@ function wait_for_build () {
   TIMER=0
   INTERVAL=10
   while true; do
-    aws cloudformation describe-stacks --stack-name ${STACKID} | grep "CREATE_COMPLETE"
+    /usr/local/bin/aws cloudformation describe-stacks --stack-name ${STACKID} | grep "CREATE_COMPLETE"
     if [ $? -eq 0 ]; then
       break
     else #increase the timer by the interval after sleeping for interval
