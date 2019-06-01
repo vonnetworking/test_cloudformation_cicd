@@ -30,7 +30,7 @@ function install_cloudsploit () {
   git clone ${GITURL} ${CLOUDSPLOIT_DIR}
 
   cd ${CLOUDSPLOIT_DIR}
-
+  /usr/local/bin/npm install async
   /usr/local/bin/npm install
   /usr/local/bin/npm audit fix
 }
