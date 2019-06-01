@@ -1,5 +1,9 @@
 pipeline {
     agent any
+    environment {
+        AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
+        AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
+    }
 
     stages {
         stage('Decompose Commit') {
@@ -7,25 +11,39 @@ pipeline {
             sh './gradlew decompose'
           }
         }
-        stage('Scan Code') {
-            steps {
-                echo 'Running cfn-lint scans...'
-                sh './gradlew cfnlint'
-            }
-        }
-        stage('Build Test Env') {
-            steps {
-                echo 'Building test stack in AWS...'
 
-                sh ( './util/_jenkins_create_test_stack.sh TestStack-$BUILD_NUMBER ./landing-zone/BasicGoodLandingZone.yaml ./params/BasicGoodLandingZone_test_params.json > stackid.out' )
-                sh ( 'cat stackid.out')
+        stage('Setup workspace') {
+          steps {
+              sh './gradlew setup'
+          }
+        }
+
+        stage('Scan Code (Static)') {
+          steps {
+              sh './gradlew cfnlint'
+          }
+        }
+
+        stage('Build Test Env') {
+          steps {
+              sh './gradlew build_test_stack'
+          }
+        }
+
+        stage('Run Cloudsploit') {
+          steps {
+            sh './gradlew run_sec_scan'
+            post {
+              always {
+                junit "./reports/sec_scan.xml"
+                }
+              }
             }
         }
+
         stage('Delete Test Env') {
           steps {
-            echo 'Deleting test stack in AWS...'
-            sh ('/usr/local/bin/aws cloudformation delete-stack --stack-name `cat stackid.out`')
-            echo 'Test Stack marked for deletion...'
+            sh './gradlew delete_test_stack'
           }
         }
     }

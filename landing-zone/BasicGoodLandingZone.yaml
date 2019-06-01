@@ -30,12 +30,14 @@ Parameters:
     Type: String
 
 Resources:
-  S3Bucket:
+  NonLoggingS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
       WebsiteConfiguration:
         IndexDocument: !Ref IndexDocument
         ErrorDocument: !Ref ErrorDocument
+      VersioningConfiguration:
+        Status: Enabled
       Tags:
         -
           Key: fm_aws_name

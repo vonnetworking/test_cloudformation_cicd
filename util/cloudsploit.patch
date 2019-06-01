@@ -1,0 +1,31 @@
+diff --git a/engine.js b/engine.js
+index 0e8a7d5..9f030bd 100644
+--- a/engine.js
++++ b/engine.js
+@@ -50,7 +50,9 @@ var engine = function (AWSConfig, AzureConfig, GitHubConfig, OracleConfig, setti
+ 			collector: require('./collectors/aws/collector.js'),
+ 			config: AWSConfig,
+ 			apiCalls: [],
+-			skipRegions: []     // Add any regions you wish to skip here. Ex: 'us-east-2'
++			skipRegions: ['us-west-1', 'us-west-2', 'ap-east-1', 'ap-south-1', 'ap-northeast-1', 'ap-northeast-2',
++                    'ap-southeast-1', 'ap-southeast-2', 'ca-central-1', 'cn-north-1', 'cn-northwest-1',
++                    'eu-central-1', 'eu-west-1', 'eu-west-2', 'eu-west-3', 'eu-north-1', 'sa-east-1']
+ 		},
+ 		azure : {
+ 			name: "azure",
+@@ -100,7 +102,7 @@ var engine = function (AWSConfig, AzureConfig, GitHubConfig, OracleConfig, setti
+ 
+ 				if (sp == 'github' && !serviceProviderConfig.organization &&
+ 					plugin.types.indexOf('user') === -1) continue;
+-				
++
+ 				// Skip if our compliance set says don't run the rule
+ 				if (!compliance.includes(spp, plugin)) continue;
+ 
+@@ -186,4 +188,4 @@ var engine = function (AWSConfig, AzureConfig, GitHubConfig, OracleConfig, setti
+ 	});
+ };
+ 
+-module.exports = engine;
+\ No newline at end of file
++module.exports = engine;

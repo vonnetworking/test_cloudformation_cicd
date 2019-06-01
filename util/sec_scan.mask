@@ -1,0 +1,3 @@
+# Masked Security Scan rules
+# Maximum of 10 rule exclusions by default
+S3*.*S3 Bucket Logging*.*global*.*FAIL*.*Bucket*.*has logging disabled

@@ -1,24 +1,120 @@
-task decompose (type: Exec) {
+//generate global properties attached to project prefix for passing env vars
+// you can override environment vars by passing values as properties to the
+// gradle or gradlew command like this "./gradlew <task> -PBUILD_NUMBER=111"
+// all other tasks should depend on setup just as a practice
+task setup {
+
+  project.ext.BUILD_NUMBER = project.findProperty('BUILD_NUMBER') ?: System.getenv("BUILD_NUMBER")
+  project.ext.CLOUDFORMATION = project.findProperty('CLOUDFORMATION') ?: System.getenv("CLOUDFORMATION")
+  project.ext.CLOUDFORMATION_TEST_PARAMS = project.findProperty('CLOUDFORMATION_TEST_PARAMS') ?: System.getenv("CLOUDFORMATION_TEST_PARAMS")
+
+  project.ext.AWS_SECRET_ACCESS_KEY = project.findProperty('AWS_SECRET_ACCESS_KEY') ?: System.getenv("AWS_SECRET_ACCESS_KEY")
+  project.ext.AWS_ACCESS_KEY_ID = project.findProperty('AWS_ACCESS_KEY_ID') ?: System.getenv("AWS_ACCESS_KEY_ID")
+
+
+  def artifact_folder = new File( './build_artifacts' )
+  def report_folder = new File( './reports' )
+
+
+  if( !artifact_folder.exists() ) {
+    // Create it
+    artifact_folder.mkdirs()
+  }
+
+  if( !report_folder.exists() ) {
+    // Create it
+    report_folder.mkdirs()
+  }
+
+}
+
+task cleanup_ws (type: Exec) {
+  //removes any existing build artifacts
+  logging.captureStandardOutput LogLevel.INFO
+  logging.captureStandardError LogLevel.INFO
+
+  doFirst { println "Cleaning up workspace..."}
+  doLast { println "Completed Cleanup!"}
+
+  workingDir '.'
+
+  commandLine 'rm', '-rf', '*.out', './build_artifacts', './reports'
+
+}
+
+task decompose (type: Exec, dependsOn: setup) {
+  logging.captureStandardOutput LogLevel.INFO
+  logging.captureStandardError LogLevel.INFO
+
   doFirst { println "decomposing commit..."}
   doLast { println "Completed decompose!"}
 
   workingDir '.'
 
-  commandLine 'sh', 'util/decompose.bash'
+  commandLine 'sh', 'util/_jenkins_decompose_commit.sh'
 
 }
 
-task cfnLint (type: Exec) {
-  doFirst { println "Running cfn-lint with custom rules..." }
-  doLast { println "cfn-lint complete!" }
+task cleanup (type: Exec) {
+  doFirst { println "decomposing commit..."}
+  doLast { println "Completed decompose!"}
 
   workingDir '.'
 
-  //on unix
-  commandLine 'cfn-lint', '--info', 'landing-zone/BasicGoodLandingZone.yaml'
+  commandLine 'rm ./stackid.out ./build_stack.out cloudsploit_results.out'
 
-  //store the output instead of printing to the console:
-  //standardOutput = new ByteArrayOutputStream()
+}
+task cfnlint (type: Exec, dependsOn: setup) {
+  //logging.captureStandardOutput LogLevel.INFO
+  //logging.captureStandardError LogLevel.INFO
 
-  //return standardOutput.toString()
+  doFirst { println "Running cfn-lint with custom rules..." }
+  doLast { println "cfn-lint complete!" }
+
+  environment 'CLOUDFORMATION', project.CLOUDFORMATION
+  workingDir '.'
+
+  commandLine './util/_jenkins_cfnlint_cft.sh'
+}
+
+task build_test_stack (type: Exec, dependsOn: setup) {
+  //logging.captureStandardOutput LogLevel.INFO
+  //logging.captureStandardError LogLevel.INFO
+
+  doFirst { println "Building Test Cloud Env..." }
+  doLast { println "Test Environment build complete!" }
+
+  workingDir '.'
+
+  environment 'STACKNAME', 'TestStack-' + project.BUILD_NUMBER
+  environment 'CLOUDFORMATION', project.CLOUDFORMATION
+  environment 'CLOUDFORMATION_TEST_PARAMS', project.CLOUDFORMATION_TEST_PARAMS
+
+  commandLine './util/_jenkins_build_test_stack.sh'
+}
+
+task run_sec_scan (type: Exec, dependsOn: setup) {
+  //logging.captureStandardOutput LogLevel.INFO
+  //logging.captureStandardError LogLevel.INFO
+
+  doFirst { println "Running Security Scan against test account..."}
+  doLast { println "Completed Security scan against test account!"}
+
+  workingDir '.'
+
+  environment 'AWS_SECRET_ACCESS_KEY', project.AWS_SECRET_ACCESS_KEY
+  environment 'AWS_ACCESS_KEY_ID', project.AWS_ACCESS_KEY_ID
+
+  commandLine './util/_jenkins_run_sec_scan.sh'
+}
+
+task delete_test_stack (type: Exec, dependsOn: setup) {
+  //logging.captureStandardOutput LogLevel.INFO
+  //logging.captureStandardError LogLevel.INFO
+
+  doFirst { println "Deleting Test Environment..."}
+  doLast { println "Test Environment Deleted!"}
+
+  workingDir '.'
+  commandLine './util/_jenkins_delete_test_stack.sh'
 }
