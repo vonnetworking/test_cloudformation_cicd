@@ -22,13 +22,22 @@
 ############################################################################
 
 PATH=$PATH:/usr/local/opt/python/bin:/usr/local/opt/python/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+CFNLINT_TMP="./cfnlint-tmp"
+mkdir ${CFNLINT_TMP}
+for F in `ls ./stage/*.zip`; do
+  unzip -j ${F} -d ${CFNLINT_TMP}
 
-/usr/local/bin/cfn-lint -r us-east-1,us-east-2 --list-rules --format=json --info $CLOUDFORMATION
+cd ${CFNLINT_TMP}
 
-if [ $? -eq 0 ]; then
-  echo "success"
-  exit 0
-else
-  echo "failure"
-  exit 1
-fi
+for F in `find . -name *.yaml`; do
+  echo "Running cfnlint on: ${F}"
+  /usr/local/bin/cfn-lint -r us-east-1,us-east-2 --format=json --info ${F}
+
+  if [ $? -eq 0 ]; then
+    echo "cfnlint completed successfully on ${F}"
+    exit 0
+  else
+    echo "cfnlint FAILED on ${F} exitting status 1..."
+    exit 1
+  fi
+done
