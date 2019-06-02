@@ -24,9 +24,11 @@
 ###
 ############################################################################
 
+PATH=$PATH:/usr/local/opt/python/bin:/usr/local/opt/python/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
 /usr/local/bin/cfn_nag_scan \
 --input-path $CLOUDFORMATION \
---parameter-values-path=$CLOUDFORMATION_TEST_PARAMS 
+--parameter-values-path=$CLOUDFORMATION_TEST_PARAMS
 #--profile-path='./util/.cfn_nagrc'
 
 if [ $? -eq 0 ]; then

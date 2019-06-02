@@ -24,6 +24,8 @@
 ###
 ############################################################################
 
+PATH=$PATH:/usr/local/opt/python/bin:/usr/local/opt/python/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
 BUILD_TIMEOUT=600
 
 function build_stack () {

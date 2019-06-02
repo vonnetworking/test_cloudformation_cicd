@@ -21,6 +21,8 @@
 ###
 ############################################################################
 
+PATH=$PATH:/usr/local/opt/python/bin:/usr/local/opt/python/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
 /usr/local/bin/cfn-lint -r us-east-1,us-east-2 --list-rules --format=json --info $CLOUDFORMATION
 
 if [ $? -eq 0 ]; then

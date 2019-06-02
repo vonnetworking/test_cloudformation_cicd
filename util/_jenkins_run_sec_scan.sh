@@ -20,6 +20,7 @@
 ###       success|failure - success exit code 0, fail exit code 1
 ###
 ############################################################################
+
 PATH=$PATH:/usr/local/opt/python/bin:/usr/local/opt/python/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 GITURL='https://github.com/cloudsploit/scans.git'
 CLOUDSPLOIT_DIR='./cloudsploit_security_scanner'

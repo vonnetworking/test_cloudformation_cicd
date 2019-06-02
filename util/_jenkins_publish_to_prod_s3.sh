@@ -23,6 +23,8 @@
 ###
 ############################################################################
 
+PATH=$PATH:/usr/local/opt/python/bin:/usr/local/opt/python/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
 
 /usr/local/bin/aws s3 cp ${CLOUDFORMATION} ${AWS_PROD_CFT_S3_BUCKET}/${CLOUDFORMATION}
 
