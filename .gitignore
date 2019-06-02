@@ -6,6 +6,8 @@ cloudsploit_security_scanner
 util/*.log
 util/stage
 util/stage/*
+util/sync
+util/sync/*
 #ignore build artifacts dir
 /build_artifacts
 # Ignore Gradle build output directory
