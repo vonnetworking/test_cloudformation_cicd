@@ -6,6 +6,8 @@ CHANGED_YAMLS=`git diff $(git log | grep Merge: | awk '{print $3}') --name-statu
 CHANGED_PARAMS=`git diff $(git log | grep Merge: | awk '{print $3}') --name-status | grep -e param | awk '{print $NF}'`
 
 IFS=$'\n'
+
+rm -rf ./stage
 mkdir ./stage
 
 for F in $CHANGED_YAMLS; do
