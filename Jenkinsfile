@@ -60,7 +60,9 @@ pipeline {
           }
         }
         stage('Cleanup') {
-          cleanWs()
+          steps {
+            cleanWs()
+          }
         }
     }
     post {
