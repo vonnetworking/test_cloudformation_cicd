@@ -35,7 +35,7 @@ function sync_code () {
 
   /usr/local/bin/aws s3 sync ${AWS_PROD_CFT_S3_BUCKET} ${AWS_STAGE_CFT_S3_BUCKET}
   mkdir -p sync
-  unzip ${ZIP_TO_TEST}  -o -d sync
+  unzip -o ${ZIP_TO_TEST} -d sync
   cd sync
   export CLOUDFORMATION=$(ls */*.yaml)
   export CLOUDFORMATION_TEST_PARAMS=$(ls -1 params/*params.json)
@@ -44,12 +44,11 @@ function sync_code () {
   /usr/local/bin/aws s3 sync . $AWS_STAGE_CFT_S3_BUCKET
 
   cd .. #move back up a level as syncing in complete
-  rm -rf sync
 }
 
 function cleanup () {
   echo "I would cleanup now..."
-  #rm -rf ./sync
+  rm -rf ./sync
 }
 
 function build_stack () {
@@ -72,7 +71,8 @@ function wait_for_build () {
   TIMER=0
   INTERVAL=5
   while true; do
-    /usr/local/bin/aws cloudformation describe-stacks --stack-name ${STACKID} | grep "CREATE_COMPLETE"
+    /usr/local/bin/aws cloudformation describe-stacks \
+    --stack-name ${STACKID} | grep "CREATE_COMPLETE"
     if [ $? -eq 0 ]; then
       break
     else #increase the timer by the interval after sleeping for interval
