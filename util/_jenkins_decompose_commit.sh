@@ -1,13 +1,27 @@
 
 
-#print the yaml or bootstrap files changed since last merge on observed branch
-#                                     #use second parent                  #grab just bootstrap, param, or yaml files
-CHANGED_FILES=`git diff $(git log | grep Merge: | awk '{print $3}') --name-status | grep -e bootstrap -e yaml -e params | awk '{print $NF}'`
+#print the yaml, bootstrap, or param files changed since last merge on observed branch
+CHANGED_BOOTSTRAPS=`git diff $(git log | grep Merge: | awk '{print $3}') --name-status | grep -e bootstrap | awk '{print $NF}'`
+CHANGED_YAMLS=`git diff $(git log | grep Merge: | awk '{print $3}') --name-status | grep -e yaml | awk '{print $NF}'`
+CHANGED_PARAMS=`git diff $(git log | grep Merge: | awk '{print $3}') --name-status | grep -e param | awk '{print $NF}'`
 
 IFS=$'\n'
 mkdir ./stage
-for F in $CHANGED_FILES; do
-  PKG_BASE=`echo $(basename $F | awk -F'.' '{print $1}')`
 
+for F in $CHANGED_YAMLS; do
+  PKG_BASE=`echo $(basename $F | awk -F'.' '{print $1}')`
+  pwd
+  find .. -name ${PKG_BASE}* | zip -r -@ ./stage/${PKG_BASE}.zip
+done
+
+for F in $CHANGED_BOOTSTRAPS; do
+  PKG_BASE=`echo $(basename $F | awk -F'.' '{print $1}')`
+  pwd
+  find .. -name ${PKG_BASE}* | zip -r -@ ./stage/${PKG_BASE}.zip
+done
+
+for F in $CHANGED_PARAMS; do
+  PKG_BASE=`echo $(basename $F | awk -F'.' '{print $1}')`
+  pwd
   find .. -name ${PKG_BASE}* | zip -r -@ ./stage/${PKG_BASE}.zip
 done

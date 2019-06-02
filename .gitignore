@@ -2,6 +2,7 @@
 .gradle
 *.out
 *.bin
+cloudsploit_security_scanner
 util/*.log
 util/stage
 util/stage/*
