@@ -34,9 +34,9 @@ function sync_code () {
   echo "Syncing code for ${ZIP_TO_TEST}"
 
   /usr/local/bin/aws s3 sync ${AWS_PROD_CFT_S3_BUCKET} ${AWS_STAGE_CFT_S3_BUCKET}
-  mkdir -p ./sync
-  unzip ${ZIP_TO_TEST} -d ./sync
-  cd ./sync
+  mkdir -p sync
+  unzip ${ZIP_TO_TEST} -d sync
+  cd sync
   export CLOUDFORMATION=$(ls */*.yaml)
   export CLOUDFORMATION_TEST_PARAMS=$(ls -1 params/*params.json)
   echo $CLOUDFORMATION_TEST_PARAMS
@@ -55,7 +55,7 @@ function build_stack () {
    /usr/local/bin/aws cloudformation create-stack \
   --stack-name="$STACKNAME" \
   --template-body="${AWS_STAGE_CFT_S3_BUCKET}/${CLOUDFORMATION}" \
-  --parameters="file://sync/${CLOUDFORMATION_TEST_PARAMS}" > ./build_stack.out
+  --parameters="file://./sync/${CLOUDFORMATION_TEST_PARAMS}" > ./build_stack.out
 
   RESULT=$?
   #trim down command output to JUST the stackid
