@@ -69,7 +69,7 @@ function check_results () {
   else
     RESULT=0
   fi
-
+  echo $RESULT
   echo $RESULT
 }
 
