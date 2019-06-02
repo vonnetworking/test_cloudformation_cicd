@@ -23,15 +23,17 @@ DELETE_TIMEOUT=600
 INTERVAL=10
 
 function delete_stack () {
-  /usr/local/bin/aws cloudformation delete-stack --stack-name `cat ./stackid.out`
-  if [ $? -ne 0 ]; then
+  for F in `ls -1 ./*.stackid.out`; do
+    /usr/local/bin/aws cloudformation delete-stack --stack-name `cat ${F}`
+    if [ $? -ne 0 ]; then
 
-    echo "failed to delete test stack..."
-    echo "Stack may require manual cleanup"
-    echo "Stack ID: " `cat ./stackid.out`
+      echo "failed to delete test stack..."
+      echo "Stack may require manual cleanup"
+      echo "Stack ID: " `cat ./stackid.out`
 
-    exit 1
-  fi
+      exit 1
+    fi
+  done
 }
 
 function wait_for_delete () {
