@@ -9,7 +9,8 @@
 ###              but based on some strange behaviors, repeating the steps is not
 ###              a terrible idea
 ###
-###
+###   ::PARAMS::
+###     No params required
 ################################################################################
 
 rm -rf build_artifacts
