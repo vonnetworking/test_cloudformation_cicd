@@ -38,7 +38,8 @@ function sync_code () {
   unzip ${ZIP_TO_TEST} -d ./sync
   cd ./sync
   export CLOUDFORMATION=$(ls */*.yaml)
-  export CLOUDFORMATION_TEST_PARAMS=$(ls params/*params.json)
+  export CLOUDFORMATION_TEST_PARAMS=$(ls -1 params/*params.json)
+  echo $CLOUDFORMATION_TEST_PARAMS
 
   /usr/local/bin/aws s3 sync . $AWS_STAGE_CFT_S3_BUCKET
 
