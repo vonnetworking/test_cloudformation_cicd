@@ -53,7 +53,7 @@ function build_stack () {
    /usr/local/bin/aws cloudformation create-stack \
   --stack-name="$STACKNAME" \
   --template-body="${AWS_STAGE_CFT_S3_BUCKET}/${CLOUDFORMATION}" \
-  --parameters="file://${AWS_STAGE_CFT_S3_BUCKET}/${CLOUDFORMATION_TEST_PARAMS}" > './build_stack.out'
+  --parameters="${AWS_STAGE_CFT_S3_BUCKET}/${CLOUDFORMATION_TEST_PARAMS}" > './build_stack.out'
 
   RESULT=$?
   #trim down command output to JUST the stackid
@@ -94,7 +94,7 @@ function main () {
   wait_for_build
 
   cleanup
-  
+
   exit ${RESULT}
 }
 
