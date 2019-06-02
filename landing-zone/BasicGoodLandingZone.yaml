@@ -10,7 +10,7 @@ Description: >
   Also note this base template should be updated so that it stays an overall GOOD
   example
 Metadata:
-  Owner: some1@email.address
+  Owner: some1@email.address2.com
   ProjectName: Base Template
   TemplateType: landing-zone
   Version: 1.0.0

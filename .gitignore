@@ -2,6 +2,7 @@
 .gradle
 *.out
 *.bin
+util/*.log
 #ignore build artifacts dir
 /build_artifacts
 # Ignore Gradle build output directory
