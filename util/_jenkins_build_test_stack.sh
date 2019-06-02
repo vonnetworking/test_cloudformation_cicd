@@ -81,21 +81,24 @@ function wait_for_build () {
   done
 }
 function main () {
-  read RESULT STACKID < <(build_stack)
+  FOR F in `ls ./stage/*.zip`; do
+    ZIP_TO_TEST=${F}
+    PREFIX=`echo ${F} | awk -F'.' '{print $1}'`
+    sync_code
+    read RESULT STACKID < <(build_stack)
 
-  if [ $RESULT -ne 0 ]; then
-    exit $RESULT
-  fi
-  echo ${STACKID} > ./stackid.out #write stack id out to placeholder file
-  echo "Starting build of stack: ${STACKID}..."
+    if [ $RESULT -ne 0 ]; then
+      exit $RESULT
+    fi
+    echo ${STACKID} > ./${PREFIX}.stackid.out #write stack id out to placeholder file
+    echo "Starting build of stack: ${STACKID}..."
 
-  echo "Waiting up to $BUILD_TIMEOUT seconds for stack build to complete..."
+    echo "Waiting up to ${BUILD_TIMEOUT} seconds for stack build to complete..."
 
-  wait_for_build
+    wait_for_build
 
-  cleanup
-
-  exit ${RESULT}
+    cleanup
+  done
 }
 
 main
