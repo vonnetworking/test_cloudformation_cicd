@@ -47,20 +47,22 @@ function run_cloudsploit () {
 
 function check_results () {
 
-  /usr/local/bin/aws cloudformation list-stack-resources \
-  --stack-name=`cat ../stackid.out` \
-  | grep "PhysicalResourceId" | awk -F ':' '{print $2}' | sed 's/"//g' | sed 's/,//g' | sed 's/ //g' > ../stack_resources.out
+  > ../stack_resources.out
+  for F in `ls ../*.stackid.out`; do
+    /usr/local/bin/aws cloudformation list-stack-resources \
+    --stack-name=`cat ../stackid.out` \
+    | grep "PhysicalResourceId" | awk -F ':' '{print $2}' | sed 's/"//g' | sed 's/,//g' | sed 's/ //g' >> ../stack_resources.out
+  done
 
   FAILED_TESTS=`grep -f ../stack_resources.out ../reports/cloudsploit_results.out | grep -vf ../util/sec_scan.mask | grep -c FAIL`
   PASSED_TESTS=`grep -f ../stack_resources.out ../reports/cloudsploit_results.out | grep -c OK`
   MASKED_TESTS=`grep -v '#' ../util/sec_scan.mask | wc -l | awk '{print $1}'`
-
+  echo -e ""
   echo -e "Security Tests Passed: ${PASSED_TESTS}" > ../reports/security_scan_summary.out
   echo -e "Security Tests Failed: ${FAILED_TESTS}" >> ../reports/security_scan_summary.out
   echo -e "Security Tests Masked: ${MASKED_TESTS}" >> ../reports/security_scan_summary.out
 
   echo "" >> ../reports/security_scan_summary.out
-
   if [ $FAILED_TESTS -gt 0 ]; then
     RESULT=1
   else
