@@ -38,8 +38,9 @@ function delete_stack () {
 
 function wait_for_delete () {
   TIMER=0
+  cat ./*.stackid.out > ./all.stackids.out
   while true; do
-    /usr/local/bin/aws cloudformation list-stacks --stack-status-filter=DELETE_COMPLETE | grep `cat ./*.stackid.out`
+    /usr/local/bin/aws cloudformation list-stacks --stack-status-filter=DELETE_COMPLETE | grep -f ./all.stackids.out
     if [ $? -eq 0 ]; then
       exit 0
     else
