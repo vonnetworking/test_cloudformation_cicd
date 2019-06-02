@@ -39,14 +39,14 @@ function delete_stack () {
 function wait_for_delete () {
   TIMER=0
   while true; do
-    /usr/local/bin/aws cloudformation list-stacks --stack-status-filter=DELETE_COMPLETE | grep `cat ./stackid.out`
+    /usr/local/bin/aws cloudformation list-stacks --stack-status-filter=DELETE_COMPLETE | grep `cat ./*.stackid.out`
     if [ $? -eq 0 ]; then
       exit 0
     else
       if [ $TIMER -ge $DELETE_TIMEOUT ]; then
         echo "Delete stack timer of $DELETE_TIMEOUT sec expired..."
         echo "Stack may require manual cleanup"
-        echo "Stack ID: " `cat ./stackid.out`
+        echo "Stack IDs: " `cat ./*.stackid.out`
         exit 1
       fi
 
@@ -59,7 +59,7 @@ function wait_for_delete () {
 function main () {
 
   #basic check that stackid is available
-  grep aws ./stackid.out
+  grep aws ./*.stackid.out
   if [ $? -ne 0 ]; then
     exit 1
   fi
