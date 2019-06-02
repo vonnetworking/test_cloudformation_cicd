@@ -51,18 +51,19 @@ function cleanup () {
 }
 
 function build_stack () {
-  export STACKNAME=`echo 'TestStack-${BUILD_NUMBER}-${PREFIX}'`
-   /usr/local/bin/aws cloudformation create-stack \
+
+  /usr/local/bin/aws cloudformation create-stack \
   --stack-name="$STACKNAME" \
   --template-url="${AWS_S3_ROOT_URL}/stage/${CLOUDFORMATION}" \
   --parameters="file://./sync/${CLOUDFORMATION_TEST_PARAMS}" > ./build_stack.out
 
   RESULT=$?
+
   #trim down command output to JUST the stackid
   STACKID=`cat './build_stack.out' | sed 's/}//g' | grep StackId \
   | awk -F'\"StackId\": ' '{print $2}' | sed 's/"//g'`
 
-  echo "${RESULT}" "$STACKID"
+  echo "${RESULT}" "${STACKID}"
 }
 
 function wait_for_build () {
@@ -86,6 +87,7 @@ function main () {
   for F in `ls ./stage/*.zip`; do
     ZIP_TO_TEST=${F}
     PREFIX=`echo ${F} | awk -F'.' '{print $1}'`
+    export STACKNAME=`echo 'TestStack-${BUILD_NUMBER}-${PREFIX}'`
     sync_code
     read RESULT STACKID < <(build_stack)
 
