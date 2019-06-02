@@ -31,11 +31,12 @@ function sync_code () {
   #grab the prod bucket and sync it to a staging bucket
   #then overlay the code we want to test and build based on that
 
-  /usr/local/bin/aws s3 sync $AWS_PROD_CFT_S3_BUCKET $AWS_STAGE_CFT_S3_BUCKET
-  mkdir ./sync
-  cd ./sync
-  unzip ${ZIP_TO_TEST}
+  echo "Syncing code for ${ZIP_TO_TEST}"
 
+  /usr/local/bin/aws s3 sync ${AWS_PROD_CFT_S3_BUCKET} ${AWS_STAGE_CFT_S3_BUCKET}
+  mkdir -p ./sync
+  unzip ${ZIP_TO_TEST} ./sync
+  cd ./sync
   export CLOUDFORMATION=$(ls ./*/*.yaml)
   export CLOUDFORMATION_TEST_PARAMS=$(ls ./params/*params.json)
 
