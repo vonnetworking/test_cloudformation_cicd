@@ -12,6 +12,7 @@ pipeline {
     stages {
         stage('Decompose Commit') {
           steps {
+            cleanWs()
             sh './util/_jenkins_decompose_commit.sh'
           }
         }
