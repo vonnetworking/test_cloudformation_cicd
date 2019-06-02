@@ -36,9 +36,6 @@ pipeline {
         }
 
         stage('Build Test Env') {
-          environment {
-            STACKNAME = sh(script: 'echo TestStack-$BUILD_NUMBER', returnStdout: true).trim()
-          }
           steps {
               sh './util/_jenkins_build_test_stack.sh'
           }
