@@ -88,6 +88,8 @@ function main () {
   for F in `ls ./stage/*.zip`; do
     ZIP_TO_TEST=${F}
     PREFIX=`echo ${F} | awk -F'.' '{print $1}'`
+    echo "prefix: " ${PREFIX}
+    echo "zip to test: " ${ZIP_TO_TEST}
     STACKNAME=`echo TestStack-${BUILD_NUMBER}-${PREFIX}`
     sync_code
     read RESULT STACKID < <(build_stack)
