@@ -75,15 +75,12 @@ function check_results () {
 
 function main () {
 
-  #basic check that stackid is available
-
-
   install_cloudsploit
   setup_cloudsploit
   run_cloudsploit
 
   read RESULT < <(check_results)
-
+  echo $RESULT
   cat ../reports/security_scan_summary.out
   cat ../reports/cloudsploit_results.out | grep -f ../stack_resources.out
   echo ""
