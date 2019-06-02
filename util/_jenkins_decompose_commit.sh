@@ -3,7 +3,7 @@
 #print the yaml, bootstrap, or param files changed since last merge on observed branch
 export CHANGED_BOOTSTRAPS=`git diff $(git log | grep Merge: | awk '{print $3}') --name-status | grep -e bootstrap | awk -F'/' '{print $3}'`
 export CHANGED_YAMLS=`git diff $(git log | grep Merge: | awk '{print $3}') --name-status | grep -e yaml | awk '{print $NF}'`
-export CHANGED_PARAMS=`git diff $(git log | grep Merge: | awk '{print $3}') --name-status | grep -e param | awk '{print $NF}'`
+export CHANGED_PARAMS=`git diff $(git log | grep Merge: | awk '{print $3}') --name-status | grep -e param | awk '{print $NF}' | awk -F'_' '{print $1}'`
 
 IFS=$'\n'
 
