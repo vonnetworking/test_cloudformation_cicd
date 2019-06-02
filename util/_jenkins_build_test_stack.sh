@@ -94,6 +94,7 @@ function main () {
     if [ $RESULT -ne 0 ]; then
       exit $RESULT
     fi
+    echo ${STACKID}
     echo ${STACKID} > ./${PREFIX}.stackid.out #write stack id out to placeholder file
     echo "Starting build of stack: ${STACKID}..."
 
