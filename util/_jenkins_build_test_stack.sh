@@ -35,7 +35,7 @@ function sync_code () {
 
   /usr/local/bin/aws s3 sync ${AWS_PROD_CFT_S3_BUCKET} ${AWS_STAGE_CFT_S3_BUCKET}
   mkdir -p ./sync
-  unzip ${ZIP_TO_TEST} ./sync
+  unzip ${ZIP_TO_TEST} -d ./sync
   cd ./sync
   export CLOUDFORMATION=$(ls ./*/*.yaml)
   export CLOUDFORMATION_TEST_PARAMS=$(ls ./params/*params.json)
