@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Decompose Commit') {
           steps {
-            sh './gradlew decompose'
+            sh './util/_jenkins_decompose_commit.sh'
           }
         }
 
