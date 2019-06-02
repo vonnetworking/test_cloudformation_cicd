@@ -26,7 +26,7 @@ CFNLINT_TMP="./cfnlint-tmp"
 mkdir ${CFNLINT_TMP}
 for F in `ls ./stage/*.zip`; do
   unzip -j ${F} -d ${CFNLINT_TMP}
-
+done
 cd ${CFNLINT_TMP}
 
 for F in `find . -name *.yaml`; do
