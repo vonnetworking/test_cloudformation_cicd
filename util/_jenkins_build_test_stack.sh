@@ -81,7 +81,7 @@ function wait_for_build () {
   done
 }
 function main () {
-  FOR F in `ls ./stage/*.zip`; do
+  for F in `ls ./stage/*.zip`; do
     ZIP_TO_TEST=${F}
     PREFIX=`echo ${F} | awk -F'.' '{print $1}'`
     sync_code
