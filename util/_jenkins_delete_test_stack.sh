@@ -29,7 +29,7 @@ function delete_stack () {
 
       echo "failed to delete test stack..."
       echo "Stack may require manual cleanup"
-      echo "Stack ID: " `cat ./stackid.out`
+      echo "Stack ID: " `cat ${F}`
 
       exit 1
     fi
