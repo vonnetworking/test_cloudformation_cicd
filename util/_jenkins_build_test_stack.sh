@@ -37,8 +37,8 @@ function sync_code () {
   mkdir -p ./sync
   unzip ${ZIP_TO_TEST} -d ./sync
   cd ./sync
-  export CLOUDFORMATION=$(ls ./*/*.yaml)
-  export CLOUDFORMATION_TEST_PARAMS=$(ls ./params/*params.json)
+  export CLOUDFORMATION=$(ls */*.yaml)
+  export CLOUDFORMATION_TEST_PARAMS=$(ls params/*params.json)
 
   /usr/local/bin/aws s3 sync . $AWS_STAGE_CFT_S3_BUCKET
 
@@ -54,7 +54,7 @@ function build_stack () {
    /usr/local/bin/aws cloudformation create-stack \
   --stack-name="$STACKNAME" \
   --template-body="${AWS_STAGE_CFT_S3_BUCKET}/${CLOUDFORMATION}" \
-  --parameters="./sync/${CLOUDFORMATION_TEST_PARAMS}" > ./build_stack.out
+  --parameters="sync/${CLOUDFORMATION_TEST_PARAMS}" > ./build_stack.out
 
   RESULT=$?
   #trim down command output to JUST the stackid
