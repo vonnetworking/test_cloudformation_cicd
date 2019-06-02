@@ -65,12 +65,12 @@ function check_results () {
 
   echo "" >> ../reports/security_scan_summary.out
   if [ $FAILED_TESTS -gt 0 ]; then
-    RESULT=1
+    local RESULT=1
     exit 1
   else
-    RESULT=0
+    local RESULT=0
   fi
-  echo "The result: " $RESULT
+
   echo $RESULT
 }
 
@@ -80,7 +80,7 @@ function main () {
   setup_cloudsploit
   run_cloudsploit
 
-  read RESULT < <(check_results)
+  RESULT=$(check_results)
   echo $RESULT
   cat ../reports/security_scan_summary.out
   cat ../reports/cloudsploit_results.out | grep -f ../stack_resources.out
