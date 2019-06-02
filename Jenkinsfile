@@ -11,15 +11,15 @@ pipeline {
     }
 
     stages {
+      stage('Setup workspace') {
+        steps {
+            sh './util/_jenkins_setup_workspace.sh'
+        }
+      }
+
         stage('Decompose Commit') {
           steps {
             sh './util/_jenkins_decompose_commit.sh'
-          }
-        }
-
-        stage('Setup workspace') {
-          steps {
-              sh './gradlew setup'
           }
         }
 
