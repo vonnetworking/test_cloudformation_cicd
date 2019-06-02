@@ -2,6 +2,7 @@
 .gradle
 *.out
 *.bin
+.DS_Store
 cloudsploit_security_scanner
 util/*.log
 util/stage

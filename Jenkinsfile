@@ -13,7 +13,7 @@ pipeline {
     stages {
       stage('Setup workspace') {
         steps {
-            sh './util/_jenkins_setup_workspace.sh'
+            sh './util/_jenkins_setup_ws.sh'
         }
       }
 
