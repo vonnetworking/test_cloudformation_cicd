@@ -47,6 +47,9 @@ function run_cloudsploit () {
 
 function check_results () {
 
+  #This block generates a pass / fail based ONLY on the resources created
+  # in the test build, that way if the account its being built into has issues
+  # the dev doesn't get penalized.
   > ../stack_resources.out
   for F in `ls ../*.stackid.out`; do
     STACKNAME=`cat ${F}`
@@ -55,9 +58,20 @@ function check_results () {
     | grep "PhysicalResourceId" | awk -F ':' '{print $2}' | sed 's/"//g' | sed 's/,//g' | sed 's/ //g' >> ../stack_resources.out
   done
 
-  FAILED_TESTS=`grep -f ../stack_resources.out ../reports/cloudsploit_results.out | grep -vf ../util/sec_scan.mask | grep -c FAIL`
+  #Summarize results
   PASSED_TESTS=`grep -f ../stack_resources.out ../reports/cloudsploit_results.out | grep -c OK`
-  MASKED_TESTS=`grep -v '#' ../util/sec_scan.mask | wc -l | awk '{print $1}'`
+
+  #If there is a rule masking file, use it, otherwise, ignore and keep rolling
+  MASK_FILE="../util/sec_scan.mask"
+  if [ -f ${MASK_FILE} ]; then
+    FAILED_TESTS=`grep -f ../stack_resources.out ../reports/cloudsploit_results.out | grep -vf ${MASK_FILE} | grep -c FAIL`
+    MASKED_TESTS=`grep -v '#' ${MASK_FILE} | wc -l | awk '{print $1}'`
+  else
+    FAILED_TESTS=`grep -f ../stack_resources.out ../reports/cloudsploit_results.out | grep -c FAIL`
+    MASKED_TESTS=0
+  fi
+
+
   echo -e ""
   echo -e "Security Tests Passed: ${PASSED_TESTS}" > ../reports/security_scan_summary.out
   echo -e "Security Tests Failed: ${FAILED_TESTS}" >> ../reports/security_scan_summary.out
@@ -66,7 +80,6 @@ function check_results () {
   echo "" >> ../reports/security_scan_summary.out
   if [ $FAILED_TESTS -gt 0 ]; then
     local RESULT=1
-    exit 1
   else
     local RESULT=0
   fi
@@ -81,7 +94,7 @@ function main () {
   run_cloudsploit
 
   RESULT=$(check_results)
-  echo $RESULT
+
   cat ../reports/security_scan_summary.out
   cat ../reports/cloudsploit_results.out | grep -f ../stack_resources.out
   echo ""
@@ -92,33 +105,36 @@ function main () {
   fi
 }
 
-function assume_role () {
-  #
-  # ./cloudsploit-wrapper.sh --profile=aws_profile_name
-  #
+# TODO - FUNCTION BELOW should be refactored to let the script assume a role to
+#        Execute the scan as a security audit role (least permissions)
+# function assume_role () {
+#   #
+#   # ./cloudsploit-wrapper.sh --profile=aws_profile_name
+#   #
+#
+#   cd $CLOUDSPLOIT_DIR
+#
+#   WHOAMI=$(whoami)
+#   BASENAME=$(basename "$0")
+#   DIRNAME=$(dirname "$0")
+#
+#   PROFILE="$1"
+#   ROLE2ASSUME="IamSecurityAuditRole"
+#   SESSION="$WHOAMI-$BASENAME"
+#
+#   ACCOUNTID=$(aws $PROFILE sts get-caller-identity --query 'Account' --output text)
+#   ROLEARN="arn:aws:iam::${ACCOUNTID}:role/${ROLE2ASSUME}"
+#
+#   eval $(aws $PROFILE sts assume-role --role-arn ${ROLEARN} \
+#     --role-session-name "${SESSION}" \
+#     --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' \
+#     --output text | \
+#     (read KEY SECRET TOKEN; echo "export AWS_ACCESS_KEY_ID=\"$KEY\"; \
+#     export AWS_SECRET_ACCESS_KEY=\"$SECRET\"; export AWS_SESSION_TOKEN=\"$TOKEN\""))
+#
+#   ulimit -s 65500
+#   node --stack-size=65500 "$DIRNAME/index.js"
+#
+# }
 
-  cd $CLOUDSPLOIT_DIR
-
-  WHOAMI=$(whoami)
-  BASENAME=$(basename "$0")
-  DIRNAME=$(dirname "$0")
-
-  PROFILE="$1"
-  ROLE2ASSUME="IamSecurityAuditRole"
-  SESSION="$WHOAMI-$BASENAME"
-
-  ACCOUNTID=$(aws $PROFILE sts get-caller-identity --query 'Account' --output text)
-  ROLEARN="arn:aws:iam::${ACCOUNTID}:role/${ROLE2ASSUME}"
-
-  eval $(aws $PROFILE sts assume-role --role-arn ${ROLEARN} \
-    --role-session-name "${SESSION}" \
-    --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' \
-    --output text | \
-    (read KEY SECRET TOKEN; echo "export AWS_ACCESS_KEY_ID=\"$KEY\"; \
-    export AWS_SECRET_ACCESS_KEY=\"$SECRET\"; export AWS_SESSION_TOKEN=\"$TOKEN\""))
-
-  ulimit -s 65500
-  node --stack-size=65500 "$DIRNAME/index.js"
-
-}
 main
