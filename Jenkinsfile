@@ -60,11 +60,11 @@ pipeline {
             sh './util/_jenkins_publish_to_prod_s3.sh'
           }
         }
-        stage('Cleanup') {
-          steps {
-            cleanWs()
-          }
-        }
+        //stage('Cleanup') {
+        //  steps {
+        //    cleanWs()
+        //  }
+        //}
     }
     post {
       always {

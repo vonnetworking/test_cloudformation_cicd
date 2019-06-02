@@ -50,7 +50,7 @@ function check_results () {
   > ../stack_resources.out
   for F in `ls ../*.stackid.out`; do
     /usr/local/bin/aws cloudformation list-stack-resources \
-    --stack-name=`cat ../stackid.out` \
+    --stack-name=${F} \
     | grep "PhysicalResourceId" | awk -F ':' '{print $2}' | sed 's/"//g' | sed 's/,//g' | sed 's/ //g' >> ../stack_resources.out
   done
 
