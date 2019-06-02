@@ -47,7 +47,8 @@ function sync_code () {
 }
 
 function cleanup () {
-  rm -rf ./sync
+  echo "I would cleanup now..."
+  #rm -rf ./sync
 }
 
 function build_stack () {
