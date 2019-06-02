@@ -51,10 +51,10 @@ function cleanup () {
 }
 
 function build_stack () {
-
+  export STACKNAME=`echo 'TestStack-${BUILD_NUMBER}-${PREFIX}'`
    /usr/local/bin/aws cloudformation create-stack \
   --stack-name="$STACKNAME" \
-  --template-url="https://av-cloud-meta-data-us-east-1.s3.us-east-1.amazonaws.com/stage/${CLOUDFORMATION}" \
+  --template-url="${AWS_S3_ROOT_URL}/stage/${CLOUDFORMATION}" \
   --parameters="file://./sync/${CLOUDFORMATION_TEST_PARAMS}" > ./build_stack.out
 
   RESULT=$?
