@@ -53,7 +53,7 @@ function build_stack () {
 
    /usr/local/bin/aws cloudformation create-stack \
   --stack-name="$STACKNAME" \
-  --template-body="s3://av-cloud-meta-data-us-east-1/stage/landing-zone/BasicGoodLandingZone.yaml"
+  --template-body="s3://av-cloud-meta-data-us-east-1/stage/landing-zone/BasicGoodLandingZone.yaml" \
   --parameters="s3://av-cloud-meta-data-us-east-1/stage/params/BasicGoodLandingZone.yaml" > ./build_stack.out
   #--template-body="${AWS_STAGE_CFT_S3_BUCKET}/${CLOUDFORMATION}" \
   #--parameters="${AWS_STAGE_CFT_S3_BUCKET}/${CLOUDFORMATION_TEST_PARAMS}" > './build_stack.out'
