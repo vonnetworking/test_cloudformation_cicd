@@ -17,6 +17,8 @@
 ###
 ############################################################################
 
+PATH=$PATH:/usr/local/opt/python/bin:/usr/local/opt/python/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
 DELETE_TIMEOUT=600
 INTERVAL=10
 
@@ -59,7 +61,7 @@ function main () {
   if [ $? -ne 0 ]; then
     exit 1
   fi
-  
+
   delete_stack
   wait_for_delete
 }
