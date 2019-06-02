@@ -54,7 +54,7 @@ function build_stack () {
 
    /usr/local/bin/aws cloudformation create-stack \
   --stack-name="$STACKNAME" \
-  --template-url="${AWS_STAGE_CFT_S3_BUCKET}/${CLOUDFORMATION}" \
+  --template-url="https://av-cloud-meta-data-us-east-1.s3.us-east-1.amazonaws.com/stage/${CLOUDFORMATION}" \
   --parameters="file://./sync/${CLOUDFORMATION_TEST_PARAMS}" > ./build_stack.out
 
   RESULT=$?
