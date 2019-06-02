@@ -66,6 +66,7 @@ function check_results () {
   echo "" >> ../reports/security_scan_summary.out
   if [ $FAILED_TESTS -gt 0 ]; then
     RESULT=1
+    exit 1
   else
     RESULT=0
   fi
