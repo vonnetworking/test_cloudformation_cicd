@@ -3,6 +3,8 @@
 *.out
 *.bin
 util/*.log
+util/stage
+util/stage/*
 #ignore build artifacts dir
 /build_artifacts
 # Ignore Gradle build output directory

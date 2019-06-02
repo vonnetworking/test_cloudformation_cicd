@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         AWS_PROD_CFT_S3_BUCKET     = credentials('jenkins-aws-prod-cft-s3-bucket')
+        AWS_STAGE_CFT_S3_BUCKET     = credentials('jenkins-aws-stage-cft-s3-bucket')
         AWS_ACCESS_KEY_ID          = credentials('jenkins-aws-secret-key-id')
         AWS_SECRET_ACCESS_KEY      = credentials('jenkins-aws-secret-access-key')
         CLOUDFORMATION             = 'landing-zone/BasicGoodLandingZone.yaml'

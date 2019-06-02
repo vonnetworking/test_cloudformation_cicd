@@ -27,26 +27,45 @@
 PATH=$PATH:/usr/local/opt/python/bin:/usr/local/opt/python/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 
 BUILD_TIMEOUT=600
+function sync_code () {
+  #grab the prod bucket and sync it to a staging bucket
+  #then overlay the code we want to test and build based on that
+
+  /usr/local/bin/aws s3 sync $AWS_PROD_CFT_S3_BUCKET $AWS_STAGE_CFT_S3_BUCKET
+  mkdir ./sync
+  cd ./sync
+  unzip ${ZIP_TO_TEST}
+
+  export CLOUDFORMATION=$(ls ./*/*.yaml)
+  export CLOUDFORMATION_TEST_PARAMS=$(ls ./params/*params.json)
+
+  /usr/local/bin/aws s3 sync . $AWS_STAGE_CFT_S3_BUCKET
+
+  cd .. #move back up a level as syncing in complete
+}
+
+function cleanup () {
+  rm -rf ./sync
+}
 
 function build_stack () {
 
    /usr/local/bin/aws cloudformation create-stack \
   --stack-name="$STACKNAME" \
-  --template-body="file://$CLOUDFORMATION" \
-  --parameters="file://$CLOUDFORMATION_TEST_PARAMS" > './build_stack.out'
+  --template-body="${AWS_STAGE_CFT_S3_BUCKET}/${CLOUDFORMATION}" \
+  --parameters="file://${AWS_STAGE_CFT_S3_BUCKET}/${CLOUDFORMATION_TEST_PARAMS}" > './build_stack.out'
 
   RESULT=$?
   #trim down command output to JUST the stackid
   STACKID=`cat './build_stack.out' | sed 's/}//g' | grep StackId \
   | awk -F'\"StackId\": ' '{print $2}' | sed 's/"//g'`
 
-
   echo "${RESULT}" "$STACKID"
 }
 
 function wait_for_build () {
   TIMER=0
-  INTERVAL=10
+  INTERVAL=5
   while true; do
     /usr/local/bin/aws cloudformation describe-stacks --stack-name ${STACKID} | grep "CREATE_COMPLETE"
     if [ $? -eq 0 ]; then
@@ -74,6 +93,8 @@ function main () {
 
   wait_for_build
 
+  cleanup
+  
   exit ${RESULT}
 }
 
