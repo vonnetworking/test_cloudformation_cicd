@@ -28,11 +28,11 @@ if [ ! -d ${CFNLINT_TMP} ]; then
 fi
 
 for F in `ls ./stage/*.zip`; do
-  unzip -j ${F} -d ${CFNLINT_TMP}
+  unzip -j ${F} -d ${CFNLINT_TMP} -o
 done
 cd ${CFNLINT_TMP}
 
-for F in `ls -1 ${CFNLINT_TMP}/*.yaml`; do
+for F in `ls -1 ./*.yaml`; do
   echo "Running cfnlint on: ${F}"
   /usr/local/bin/cfn-lint -r us-east-1,us-east-2 --format=json --info ${F}
 
