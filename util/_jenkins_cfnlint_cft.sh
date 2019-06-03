@@ -43,9 +43,13 @@ for F in `ls -1 *.yaml`; do
   if [ $? -eq 0 ]; then
     if [ $RESULT -eq 1]; then
       RESULT=1
+    else
+      RESULT=0
+    fi
     echo "cfnlint completed successfully on ${F}"
   else
     RESULT=1
+    echo "cfnlint run FAILED on ${F}!"
   fi
 done
 
