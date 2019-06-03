@@ -41,7 +41,7 @@ for F in `ls -1 *.yaml`; do
   /usr/local/bin/cfn-lint -r us-east-1,us-east-2 --format=json --info ${F}
 
   if [ $? -eq 0 ]; then
-    if [ $RESULT -eq 1]; then
+    if [ $RESULT -eq 1 ]; then
       RESULT=1
     else
       RESULT=0
