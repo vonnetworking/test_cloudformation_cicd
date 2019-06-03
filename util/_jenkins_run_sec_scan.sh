@@ -31,9 +31,9 @@ function install_cloudsploit () {
   git clone ${GITURL} ${CLOUDSPLOIT_DIR}
 
   cd ${CLOUDSPLOIT_DIR}
-  /usr/local/bin/npm install async > /dev/null 2>&1
-  /usr/local/bin/npm install > /dev/null 2>&1
-  /usr/local/bin/npm audit fix > /dev/null 2>&1
+  /usr/local/bin/npm install async #> /dev/null 2>&1
+  /usr/local/bin/npm install #> /dev/null 2>&1
+  /usr/local/bin/npm audit fix #> /dev/null 2>&1
 }
 
 function setup_cloudsploit () {
@@ -50,7 +50,7 @@ function check_results () {
   #This block generates a pass / fail based ONLY on the resources created
   # in the test build, that way if the account its being built into has issues
   # the dev doesn't get penalized.
-  > ../stack_resources.out
+  > ../stack_resources.out #clearn out file
   for F in `ls ../*.stackid.out`; do
     STACKNAME=`cat ${F}`
     /usr/local/bin/aws cloudformation list-stack-resources \
@@ -105,7 +105,7 @@ function main () {
   fi
 }
 
-# TODO - FUNCTION BELOW should be refactored to let the script assume a role to
+# TODO - FUNCTION BELOW could be refactored to let the script assume a role to
 #        Execute the scan as a security audit role (least permissions)
 # function assume_role () {
 #   #
