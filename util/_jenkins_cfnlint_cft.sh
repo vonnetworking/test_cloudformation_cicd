@@ -35,15 +35,18 @@ for F in `ls ./stage/*.zip`; do
 done
 cd ${CFNLINT_TMP}
 
+RESULT=0 #Assume success
 for F in `ls -1 *.yaml`; do
   echo "Running cfnlint on: ${F}"
   /usr/local/bin/cfn-lint -r us-east-1,us-east-2 --format=json --info ${F}
 
   if [ $? -eq 0 ]; then
+    if [ $RESULT -eq 1]; then
+      RESULT=1
     echo "cfnlint completed successfully on ${F}"
-    exit 0
   else
-    echo "cfnlint FAILED on ${F} exitting status 1..."
-    exit 1
+    RESULT=1
   fi
 done
+
+exit $RESULT
