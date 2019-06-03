@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent {label 'aws'}
     environment {
         AWS_PROD_CFT_S3_BUCKET     = credentials('jenkins-aws-prod-cft-s3-bucket')
         AWS_STAGE_CFT_S3_BUCKET    = credentials('jenkins-aws-stage-cft-s3-bucket')
