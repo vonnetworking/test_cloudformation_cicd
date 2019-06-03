@@ -28,7 +28,7 @@ if [ ! -d ${CFNLINT_TMP} ]; then
 fi
 
 for F in `ls ./stage/*.zip`; do
-  unzip -j ${F} -d ${CFNLINT_TMP} -o
+  unzip -o -j ${F} -d ${CFNLINT_TMP}
 done
 cd ${CFNLINT_TMP}
 
