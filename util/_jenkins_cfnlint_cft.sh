@@ -23,13 +23,16 @@
 
 PATH=$PATH:/usr/local/opt/python/bin:/usr/local/opt/python/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 CFNLINT_TMP="./cfnlint-tmp"
-mkdir ${CFNLINT_TMP}
+if [ ! -d ${CFNLINT_TMP} ]; then
+  mkdir ${CFNLINT_TMP}
+fi
+
 for F in `ls ./stage/*.zip`; do
   unzip -j ${F} -d ${CFNLINT_TMP}
 done
 cd ${CFNLINT_TMP}
 
-for F in `find . -name *.yaml`; do
+for F in `ls -1 ${CFNLINT_TMP}/*.yaml`; do
   echo "Running cfnlint on: ${F}"
   /usr/local/bin/cfn-lint -r us-east-1,us-east-2 --format=json --info ${F}
 
